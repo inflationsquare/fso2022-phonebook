@@ -26,6 +26,16 @@ let persons = [
     }
 ]
 
+app.get('/info', (req, resp) => {
+    const time = Date()
+    resp.send(`
+    <body>
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${time.toLocaleString()}</p>
+    </body>
+    `)
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
@@ -39,15 +49,12 @@ app.get('/api/persons/:id', (request, response) => {
 
 })
 
-app.get('/info', (req, resp) => {
-    const time = Date()
-    resp.send(`
-    <body>
-        <p>Phonebook has info for ${persons.length} people</p>
-        <p>${time.toLocaleString()}</p>
-    </body>
-    `)
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(p => p.id !== id)
+    response.status(204).end()
 })
+
 
 const PORT = 3001
 
