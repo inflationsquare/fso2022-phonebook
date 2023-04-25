@@ -55,6 +55,37 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+const generateId = () => {
+    return Math.floor(Math.random()*100000)
+}
+
+app.post('/api/persons', (request, response) => {
+
+    const body = request.body
+    if (!body.name) {
+        return response.status(400).json({"error": "Missing name"})
+    }
+
+    if (persons.map(x => x.name).includes(body.name)) {
+        return response.status(400).json({"error": "Person has already been added"})
+    }
+
+    if (!body.number) {
+        return response.status(400).json({"error": "Missing number"})
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    }
+
+    console.log(person)
+
+    persons = persons.concat(person)
+    response.json(person)
+})
+
 
 const PORT = 3001
 
